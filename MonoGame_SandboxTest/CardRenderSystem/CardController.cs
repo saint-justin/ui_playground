@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using MonoGame_SandboxTest.Options;
 
 namespace MonoGame_SandboxTest.CardRenderSystem
 {
@@ -25,18 +27,31 @@ namespace MonoGame_SandboxTest.CardRenderSystem
                 defaultCardTexture.Height * (int)Math.Round(defaultCardScale.Y));
 
             cards = new List<Card>() {
-                new Card(defaultCardTexture, new Vector2(100, 100), new Vector2(5.0f, 5.0f)),
-                new Card(defaultCardTexture, new Vector2(100, 300), new Vector2(3.5f, 3.5f)),
+                new Card(defaultCardTexture, Vector2.Zero, defaultCardScale),
+                new Card(defaultCardTexture, Vector2.Zero, defaultCardScale),
             };
         }
 
         public void Update(GameTime gameTime)
         {
-            // Assign card default positions based on how many cards are in the list
+            int screenCenter = OptionsManager.screenWidth / 2;
+
+            // Assign card positions based on how many cards are in the list
+            float cardAmountOffset = cards.Count % 2 == 0 ? 0.5f : 0f;
             for (int i = 0; i < cards.Count; i++)
             {
-
+                int relativeCenteredPosition = i - (cards.Count / 2);
+                float scaledOffset = cards[i].scaledTextureDimensions.X * (relativeCenteredPosition + cardAmountOffset);
+                cards[i].SetPosition(new Vector2(screenCenter + scaledOffset, OptionsManager.screenHeight));
             }
+
+            cards.ForEach(card => 
+            { 
+                if (card.needsUpdate) { card.Update(gameTime); } 
+            });
+
+            if (Keyboard.GetState().IsKeyDown(Keys.OemPlus)) { cards.Add(new Card(defaultCardTexture, Vector2.Zero, defaultCardScale)); }
+            if (Keyboard.GetState().IsKeyDown(Keys.OemMinus)) { cards.RemoveAt(cards.Count - 1); }
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
