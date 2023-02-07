@@ -29,7 +29,11 @@ namespace MonoGame_SandboxTest
 
         protected override void Initialize()
         {
+            // Static Systems
             OptionsManager.Init(graphics);
+            InputManager.Init();
+
+            // Game Demo Elements
             cardController = new CardController(Content); 
 
             // LoadContent + additional graphics setup automatically called
@@ -45,9 +49,13 @@ namespace MonoGame_SandboxTest
 
         protected override void Update(GameTime gameTime)
         {
+            // Update Inputs
+            InputManager.Update();
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            // Check for options updates
             if (OptionsManager.shouldUpdate) {
                 Debug.WriteLine("Options dirty, updating...");
                 OptionsManager.UpdateOptions(); 

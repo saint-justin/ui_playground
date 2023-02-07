@@ -37,11 +37,11 @@ namespace MonoGame_SandboxTest.CardRenderSystem
             int screenCenter = OptionsManager.screenWidth / 2;
 
             // Assign card positions based on how many cards are in the list
-            float cardAmountOffset = cards.Count % 2 == 0 ? 0.5f : 0f;
+            float cardOffsetAmount = cards.Count % 2 == 0 ? 0.5f : 0f;
             for (int i = 0; i < cards.Count; i++)
             {
                 int relativeCenteredPosition = i - (cards.Count / 2);
-                float scaledOffset = cards[i].scaledTextureDimensions.X * (relativeCenteredPosition + cardAmountOffset);
+                float scaledOffset = cards[i].scaledTextureDimensions.X * (relativeCenteredPosition + cardOffsetAmount);
                 cards[i].SetPosition(new Vector2(screenCenter + scaledOffset, OptionsManager.screenHeight));
             }
 
@@ -50,8 +50,8 @@ namespace MonoGame_SandboxTest.CardRenderSystem
                 if (card.needsUpdate) { card.Update(gameTime); } 
             });
 
-            if (Keyboard.GetState().IsKeyDown(Keys.OemPlus)) { cards.Add(new Card(defaultCardTexture, Vector2.Zero, defaultCardScale)); }
-            if (Keyboard.GetState().IsKeyDown(Keys.OemMinus)) { cards.RemoveAt(cards.Count - 1); }
+            if (InputManager.GetKeyDown(Keys.OemPlus)) { cards.Add(new Card(defaultCardTexture, Vector2.Zero, defaultCardScale)); }
+            if (InputManager.GetKeyDown(Keys.OemMinus)) { cards.RemoveAt(cards.Count - 1); }
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
