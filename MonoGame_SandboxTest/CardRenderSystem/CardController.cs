@@ -30,13 +30,9 @@ namespace MonoGame_SandboxTest.CardRenderSystem
                 new Card(defaultCardTexture, Vector2.Zero, defaultCardScale),
                 new Card(defaultCardTexture, Vector2.Zero, defaultCardScale),
             };
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            int screenCenter = OptionsManager.screenWidth / 2;
 
             // Assign card positions based on how many cards are in the list
+            int screenCenter = OptionsManager.screenWidth / 2;
             float cardOffsetAmount = cards.Count % 2 == 0 ? 0.5f : 0f;
             for (int i = 0; i < cards.Count; i++)
             {
@@ -44,19 +40,36 @@ namespace MonoGame_SandboxTest.CardRenderSystem
                 float scaledOffset = cards[i].scaledTextureDimensions.X * (relativeCenteredPosition + cardOffsetAmount);
                 cards[i].SetPosition(new Vector2(screenCenter + scaledOffset, OptionsManager.screenHeight));
             }
+        }
 
-            cards.ForEach(card => 
-            { 
-                if (card.needsUpdate) { card.Update(gameTime); } 
-            });
+        public void Update(GameTime gameTime)
+        {
+            cards.ForEach(card => card.Update(gameTime));
 
             if (InputManager.GetKeyDown(Keys.OemPlus)) { cards.Add(new Card(defaultCardTexture, Vector2.Zero, defaultCardScale)); }
             if (InputManager.GetKeyDown(Keys.OemMinus)) { cards.RemoveAt(cards.Count - 1); }
+
+            if (InputManager.GetKeyDown(Keys.Enter))
+            {
+                Console.WriteLine("Starting position movement...");
+                Random rng = new Random();
+                cards.ForEach(card => {
+                    int x = rng.Next(0, OptionsManager.screenWidth);
+                    int y = rng.Next(0, OptionsManager.screenHeight);
+
+                    card.MoveTo(new Vector2(x, y), 3.0f);
+                });
+            }
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             cards.ForEach(card => card.Draw(gameTime, spriteBatch));
+        }
+
+        private void MoveTo(Vector2 start, Vector2 end, float percentage)
+        {
+
         }
     }
 }
