@@ -44,6 +44,7 @@ namespace MonoGame_SandboxTest.CardRenderSystem
         public void MoveTo(Vector2 targetPosition, float duration)
         {
             this.position.MoveTo(targetPosition, duration);
+            this.isDirty = true;
         }
 
         public void Initialize() { /* do nothing */ }

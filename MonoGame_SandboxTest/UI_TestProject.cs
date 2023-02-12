@@ -61,15 +61,15 @@ namespace MonoGame_SandboxTest
                 OptionsManager.UpdateOptions(); 
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.P))
+            if (InputManager.IsKeyDown(Keys.P))
             {
                 Debug.WriteLine("P Key Pressed, Updating Screen Width to " + (OptionsManager.screenWidth + 200));
                 OptionsManager.SetScreenWidth(OptionsManager.screenWidth + 200);
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.O))
+            if (InputManager.IsKeyDown(Keys.O))
             {
-                Debug.WriteLine("P Key Pressed, Updating Screen Width to " + (OptionsManager.screenWidth - 200));
+                Debug.WriteLine("O Key Pressed, Updating Screen Width to " + (OptionsManager.screenWidth - 200));
                 OptionsManager.SetScreenWidth(OptionsManager.screenWidth - 200);
             }
 
