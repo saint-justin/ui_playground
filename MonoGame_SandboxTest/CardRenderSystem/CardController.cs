@@ -14,14 +14,12 @@ namespace MonoGame_SandboxTest.CardRenderSystem
         Texture2D defaultCardTexture;
 
         Vector2 defaultCardScale;
-        Vector2 expandedCardScale;
         Vector2 defaultCardSize;
         float paddedCardWidth;
 
         public CardController(ContentManager contentManager) {
             defaultCardTexture = contentManager.Load<Texture2D>("card_template");
             defaultCardScale = new Vector2(4.25f, 4.25f);
-            // expandedCardScale = new Vector2(5.0f, 5.0f);
 
             defaultCardSize = new Vector2(
                 defaultCardTexture.Width * (int)Math.Round(defaultCardScale.X),
