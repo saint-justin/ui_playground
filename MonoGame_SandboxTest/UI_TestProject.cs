@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame_SandboxTest.CardRenderSystem;
 using MonoGame_SandboxTest.Options;
+using MonoGame_SandboxTest.Utilities;
 
 namespace MonoGame_SandboxTest
 {
@@ -32,6 +33,7 @@ namespace MonoGame_SandboxTest
             // Static Systems
             OptionsManager.Init(graphics);
             InputManager.Init();
+            DebugManager.Init(Content);
 
             // Game Demo Elements
             cardController = new CardController(Content); 
@@ -49,44 +51,48 @@ namespace MonoGame_SandboxTest
 
         protected override void Update(GameTime gameTime)
         {
-            // Update Inputs
+            // Update debug info
+            DebugManager.Write("Screen Width: " + OptionsManager.screenWidth);
+            DebugManager.Write("Screen Height: " + OptionsManager.screenWidth);
+
+            // Update user inputs
             InputManager.Update();
+            CheckUserInputs();
 
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
-            // Check for options updates
-            if (OptionsManager.shouldUpdate) {
-                Debug.WriteLine("Options dirty, updating...");
-                OptionsManager.UpdateOptions(); 
-            }
-
-            if (InputManager.IsKeyDown(Keys.P))
-            {
-                Debug.WriteLine("P Key Pressed, Updating Screen Width to " + (OptionsManager.screenWidth + 200));
-                OptionsManager.SetScreenWidth(OptionsManager.screenWidth + 200);
-            }
-
-            if (InputManager.IsKeyDown(Keys.O))
-            {
-                Debug.WriteLine("O Key Pressed, Updating Screen Width to " + (OptionsManager.screenWidth - 200));
-                OptionsManager.SetScreenWidth(OptionsManager.screenWidth - 200);
-            }
-
+            // Update entities
             cardController.Update(gameTime);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.SlateGray);
 
             // TODO: Add your drawing code here
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Opaque, SamplerState.PointClamp);
             cardController.Draw(gameTime, spriteBatch);
             spriteBatch.End();
 
+            // Debug should always draw last
+            spriteBatch.Begin();
+            DebugManager.Draw(spriteBatch);
+            spriteBatch.End();
+
+
             base.Draw(gameTime);
+        }
+
+        private void CheckUserInputs()
+        {
+            // Check for screen updates
+            if (InputManager.IsKeyDown(Keys.P))
+            {
+                //Debug.WriteLine("P Key Pressed, Updating Screen Width to " + (OptionsManager.screenWidth + 200));
+                OptionsManager.SetScreenWidth(OptionsManager.screenWidth + 200);
+            } else if (InputManager.IsKeyDown(Keys.O)) {
+                // Debug.WriteLine("O Key Pressed, Updating Screen Width to " + (OptionsManager.screenWidth - 200));
+                OptionsManager.SetScreenWidth(OptionsManager.screenWidth - 200);
+            }
         }
     }
 }

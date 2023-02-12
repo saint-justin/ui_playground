@@ -29,7 +29,7 @@ namespace MonoGame_SandboxTest.Options
             currentState = Keyboard.GetState();
         }
 
-        /// Returns whether a key has been pressed this frame and not the previous
+        // Returns whether a key has been pressed this frame and not the previous
         public static bool IsKeyDown(Keys key)
         {
             if (!currentState.GetPressedKeys().Contains(key)) { return false; }

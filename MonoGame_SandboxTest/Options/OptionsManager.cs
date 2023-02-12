@@ -26,32 +26,23 @@ namespace MonoGame_SandboxTest.Options
             OptionsManager.graphics = graphics;
 
             shouldUpdate = false;
-            screenHeight = 1080;
-            screenWidth = 1920;
-
-            UpdateOptions();
+            SetScreenHeight(1080);
+            SetScreenWidth(1920);
         }
 
         // Setters should include update flags
         public static void SetScreenHeight(int height) 
         {
             screenHeight = height;
-            shouldUpdate = true;
+            graphics.PreferredBackBufferHeight = screenHeight;
+            graphics.ApplyChanges();
         }
         
         public static void SetScreenWidth(int width)
         {
             screenWidth = width;
-            shouldUpdate = true;
-        }
-
-        public static void UpdateOptions()
-        {
             graphics.PreferredBackBufferWidth = screenWidth;
-            graphics.PreferredBackBufferHeight = screenHeight;
             graphics.ApplyChanges();
-
-            shouldUpdate = false;
         }
     }
 }
