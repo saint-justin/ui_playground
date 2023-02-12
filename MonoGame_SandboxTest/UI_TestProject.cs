@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -51,16 +52,16 @@ namespace MonoGame_SandboxTest
 
         protected override void Update(GameTime gameTime)
         {
-            // Update debug info
-            DebugManager.Write("Screen Width: " + OptionsManager.screenWidth);
-            DebugManager.Write("Screen Height: " + OptionsManager.screenWidth);
-
             // Update user inputs
             InputManager.Update();
             CheckUserInputs();
 
             // Update entities
             cardController.Update(gameTime);
+
+            // Update debug info
+            WriteDebugInfo(gameTime);
+
             base.Update(gameTime);
         }
 
@@ -74,10 +75,7 @@ namespace MonoGame_SandboxTest
             spriteBatch.End();
 
             // Debug should always draw last
-            spriteBatch.Begin();
             DebugManager.Draw(spriteBatch);
-            spriteBatch.End();
-
 
             base.Draw(gameTime);
         }
@@ -93,6 +91,19 @@ namespace MonoGame_SandboxTest
                 // Debug.WriteLine("O Key Pressed, Updating Screen Width to " + (OptionsManager.screenWidth - 200));
                 OptionsManager.SetScreenWidth(OptionsManager.screenWidth - 200);
             }
+
+            // Debug toggle
+            if (InputManager.IsKeyDown(Keys.F1)) DebugManager.isEnabled = !DebugManager.isEnabled;
+        }
+
+        private void WriteDebugInfo(GameTime gameTime)
+        {
+            if (!DebugManager.isEnabled) return;
+
+            // Update debug info
+            DebugManager.Write(Math.Clamp(Math.Round(1000 / gameTime.ElapsedGameTime.TotalMilliseconds), 0, 99999) + " FPS");
+            DebugManager.Write("Screen Width: " + OptionsManager.screenWidth);
+            DebugManager.Write("Screen Height: " + OptionsManager.screenWidth);
         }
     }
 }

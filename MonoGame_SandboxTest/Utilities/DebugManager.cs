@@ -14,16 +14,17 @@ namespace MonoGame_SandboxTest.Utilities
     {
         public static bool isEnabled { get; set; } = true;
         private static List<string> messageQueue;
-        private static int screenPadding;
+        private static int borderPadding = 16;
+        private static int linePadding = 24;
         private static Vector2 baseDrawPos;
         private static SpriteFont debugFont;
 
         public static void Init(ContentManager contentManager)
         {
             messageQueue = new List<string>();
-            screenPadding = (int) Math.Round(0.025f * OptionsManager.screenWidth);
-            baseDrawPos = new Vector2(screenPadding);
+            baseDrawPos = new Vector2(borderPadding);
             debugFont = contentManager.Load<SpriteFont>("Fonts/Debug");
+            debugFont.Spacing = 1.5f;
         }
 
         // TODO: Fix double-writing bug when another window is selected
@@ -34,16 +35,25 @@ namespace MonoGame_SandboxTest.Utilities
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            if (!isEnabled) return;
+            if (!isEnabled)
+            {
+                messageQueue.Clear();
+                return;
+            };
+
+            spriteBatch.Begin();
 
             // Draw all string content
             for (int i = 0; i < messageQueue.Count; i++)
             {
-                spriteBatch.DrawString(debugFont, messageQueue[i], new Vector2(baseDrawPos.X, baseDrawPos.Y + (i * 20)), Color.White);
+                spriteBatch.DrawString(debugFont, messageQueue[i], new Vector2(baseDrawPos.X, baseDrawPos.Y + (i * linePadding)), Color.White);
             }
             messageQueue.Clear();
 
             // TODO: Draw lines/rects/simple shapes
+
+            spriteBatch.End();
+
         }
     }
 }
