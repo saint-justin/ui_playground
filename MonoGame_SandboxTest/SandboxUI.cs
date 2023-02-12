@@ -1,81 +1,83 @@
-﻿using System;
-using System.Diagnostics;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using MonoGame_SandboxTest.CardRenderSystem;
-using MonoGame_SandboxTest.Options;
-using MonoGame_SandboxTest.Utilities;
-
-namespace MonoGame_SandboxTest
+﻿namespace MonoGame_SandboxTest
 {
-    public class UI_TestProject : Game
+    using System;
+    using System.Diagnostics;
+    using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Graphics;
+    using Microsoft.Xna.Framework.Input;
+    using MonoGame_SandboxTest.CardRenderSystem;
+    using MonoGame_SandboxTest.Options;
+    using MonoGame_SandboxTest.Utilities;
+
+    /// <summary>
+    /// Sandbox environment to explore creating different UI elements via Monogame.
+    /// </summary>
+    public class SandboxUI : Game
     {
+        // Instanced default classes
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
 
-        // Cards manager
+        // Instanced managers
         private CardController cardController;
 
-
-        public UI_TestProject()
+        public SandboxUI()
         {
             // Graphics settings
-            graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferWidth = 1920;
-            graphics.PreferredBackBufferHeight = 1080;
+            this.graphics = new GraphicsDeviceManager(this);
+            this.graphics.PreferredBackBufferWidth = 1920;
+            this.graphics.PreferredBackBufferHeight = 1080;
 
-            Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            this.Content.RootDirectory = "Content";
+            this.IsMouseVisible = true;
         }
 
         protected override void Initialize()
         {
             // Static Systems
-            OptionsManager.Init(graphics);
+            OptionsManager.Init(this.graphics);
             InputManager.Init();
-            DebugManager.Init(Content);
+            DebugManager.Init(this.Content);
 
             // Game Demo Elements
-            cardController = new CardController(Content); 
+            this.cardController = new CardController(this.Content);
 
             // LoadContent + additional graphics setup automatically called
             base.Initialize();
         }
 
-        // Used for loading/uploading/reloading after initialization 
         protected override void LoadContent()
         {
             // Default load
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            this.spriteBatch = new SpriteBatch(this.GraphicsDevice);
         }
 
         protected override void Update(GameTime gameTime)
         {
             // Update user inputs
             InputManager.Update();
-            CheckUserInputs();
+            this.CheckUserInputs();
 
             // Update entities
-            cardController.Update(gameTime);
+            this.cardController.Update(gameTime);
 
             // Update debug info
-            WriteDebugInfo(gameTime);
+            this.WriteDebugInfo(gameTime);
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.SlateGray);
+            this.GraphicsDevice.Clear(Color.SlateGray);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Opaque, SamplerState.PointClamp);
-            cardController.Draw(gameTime, spriteBatch);
-            spriteBatch.End();
+            this.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Opaque, SamplerState.PointClamp);
+            this.cardController.Draw(gameTime, this.spriteBatch);
+            this.spriteBatch.End();
 
             // Debug should always draw last
-            DebugManager.Draw(spriteBatch);
+            DebugManager.Draw(this.spriteBatch);
 
             base.Draw(gameTime);
         }
@@ -85,20 +87,18 @@ namespace MonoGame_SandboxTest
             // Check for screen updates
             if (InputManager.IsKeyDown(Keys.P))
             {
-                //Debug.WriteLine("P Key Pressed, Updating Screen Width to " + (OptionsManager.screenWidth + 200));
                 OptionsManager.SetScreenWidth(OptionsManager.screenWidth + 200);
             } else if (InputManager.IsKeyDown(Keys.O)) {
-                // Debug.WriteLine("O Key Pressed, Updating Screen Width to " + (OptionsManager.screenWidth - 200));
                 OptionsManager.SetScreenWidth(OptionsManager.screenWidth - 200);
             }
 
             // Debug toggle
-            if (InputManager.IsKeyDown(Keys.F1)) DebugManager.isEnabled = !DebugManager.isEnabled;
+            if (InputManager.IsKeyDown(Keys.F1)) DebugManager.Enabled = !DebugManager.Enabled;
         }
 
         private void WriteDebugInfo(GameTime gameTime)
         {
-            if (!DebugManager.isEnabled) return;
+            if (!DebugManager.Enabled) return;
 
             // Update debug info
             DebugManager.Write(Math.Clamp(Math.Round(1000 / gameTime.ElapsedGameTime.TotalMilliseconds), 0, 99999) + " FPS");

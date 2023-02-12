@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-
-namespace MonoGame_SandboxTest.CardRenderSystem
+﻿namespace MonoGame_SandboxTest.CardRenderSystem
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Microsoft.Xna.Framework;
+
     enum InterpolationType
     {
         linear,
@@ -35,7 +35,7 @@ namespace MonoGame_SandboxTest.CardRenderSystem
         // Move from current position to new position over a defined duration (in seconds)
         public void MoveTo(Vector2 position, float duration)
         {
-            this.positionStart = positionCurrent;
+            this.positionStart = this.positionCurrent;
             this.positionEnd = position;
             this.durationCurrent = 0.0f;
             this.durationTarget = duration;
@@ -57,28 +57,28 @@ namespace MonoGame_SandboxTest.CardRenderSystem
         public Vector2 GetCurrent(GameTime gameTime)
         {
             // Non-moving
-            if (!isMoving) { return positionCurrent; }
+            if (!this.isMoving) { return this.positionCurrent; }
 
             // Check if this is the last tick of movement
-            durationCurrent += gameTime.ElapsedGameTime.TotalSeconds;
-            if (durationCurrent >= durationTarget)
+            this.durationCurrent += gameTime.ElapsedGameTime.TotalSeconds;
+            if (this.durationCurrent >= this.durationTarget)
             {
-                durationCurrent = durationTarget;
-                isMoving = false;
+                this.durationCurrent = this.durationTarget;
+                this.isMoving = false;
             }
 
             // Calculate new position
-            switch (interpolationType)
+            switch (this.interpolationType)
             {   
                 case InterpolationType.linear:
-                    positionCurrent = Vector2.Lerp(positionStart, positionEnd, (float) durationCurrent);
+                    this.positionCurrent = Vector2.Lerp(this.positionStart, this.positionEnd, (float) this.durationCurrent);
                     break;
 
                 default:
                     throw new Exception("Interpolation method not implemented");
             }
 
-            return positionCurrent;
+            return this.positionCurrent;
         }
     }
 }

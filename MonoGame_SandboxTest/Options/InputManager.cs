@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework.Input;
-
-namespace MonoGame_SandboxTest.Options
+﻿namespace MonoGame_SandboxTest.Options
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Linq;
+    using System.Runtime.CompilerServices;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Microsoft.Xna.Framework.Input;
+
     /// <summary>
     /// Class for managing Keyboard (and potentially Controller) inputs
     /// </summary>

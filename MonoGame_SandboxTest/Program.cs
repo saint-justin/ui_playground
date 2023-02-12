@@ -1,3 +1,3 @@
 ﻿
-using var game = new MonoGame_SandboxTest.UI_TestProject();
+using var game = new MonoGame_SandboxTest.SandboxUI();
 game.Run();

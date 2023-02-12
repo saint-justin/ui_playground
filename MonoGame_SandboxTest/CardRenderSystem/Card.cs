@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
-namespace MonoGame_SandboxTest.CardRenderSystem
+﻿namespace MonoGame_SandboxTest.CardRenderSystem
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.CompilerServices;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Graphics;
+
     internal class Card : IEntity
     {
         private Texture2D texture;
@@ -56,12 +56,12 @@ namespace MonoGame_SandboxTest.CardRenderSystem
 
             Vector2 current = this.position.GetCurrent(gameTime);
             this.currentTranspose = new Rectangle(
-                (int) Math.Round(current.X) - (int) Math.Round(scaledTextureDimensions.X / 2),
-                (int) Math.Round(current.Y) - (int) Math.Round(scaledTextureDimensions.Y / 2), 
-                (int) Math.Round(scaledTextureDimensions.X),
-                (int) Math.Round(scaledTextureDimensions.Y));
+                (int) Math.Round(current.X) - (int) Math.Round(this.scaledTextureDimensions.X / 2),
+                (int) Math.Round(current.Y) - (int) Math.Round(this.scaledTextureDimensions.Y / 2), 
+                (int) Math.Round(this.scaledTextureDimensions.X),
+                (int) Math.Round(this.scaledTextureDimensions.Y));
 
-            isDirty = false;
+            this.isDirty = false;
         }
 
         // Draws card centered about its position
