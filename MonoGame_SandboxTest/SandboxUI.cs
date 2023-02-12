@@ -101,9 +101,22 @@
             if (!DebugManager.Enabled) return;
 
             // Update debug info
-            DebugManager.Write(Math.Clamp(Math.Round(1000 / gameTime.ElapsedGameTime.TotalMilliseconds), 0, 99999) + " FPS");
-            DebugManager.Write("Screen Width: " + OptionsManager.screenWidth);
-            DebugManager.Write("Screen Height: " + OptionsManager.screenWidth);
+            DebugManager.WriteLine(Math.Clamp(Math.Round(1000 / gameTime.ElapsedGameTime.TotalMilliseconds), 0, 999999) + " FPS");
+            DebugManager.WriteLine("Screen Width: " + OptionsManager.screenWidth);
+            DebugManager.WriteLine("Screen Height: " + OptionsManager.screenHeight);
+
+            // Draw horizontal + vertical centers
+            DebugManager.DrawLine(
+                new Vector2(OptionsManager.screenWidth / 2, 0),
+                new Vector2(OptionsManager.screenWidth / 2, OptionsManager.screenHeight),
+                3.0f,
+                Color.Green);
+
+            DebugManager.DrawLine(
+                new Vector2(0, OptionsManager.screenHeight / 2),
+                new Vector2(OptionsManager.screenWidth, OptionsManager.screenHeight / 2),
+                3.0f,
+                Color.Gold);
         }
     }
 }
