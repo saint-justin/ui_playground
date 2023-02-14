@@ -61,15 +61,51 @@
                 this.UpdatePositionOfCardsInHand();
             }
 
-            if (InputManager.IsKeyDown(Keys.Enter))
+            if (InputManager.IsKeyDown(Keys.D1))
             {
-                Console.WriteLine("Starting position movement...");
                 Random rng = new Random();
-                this.cards.ForEach(card => {
+                this.cards.ForEach(card =>
+                {
                     int x = rng.Next(0, OptionsManager.screenWidth);
                     int y = rng.Next(0, OptionsManager.screenHeight);
 
-                    card.MoveTo(new Vector2(x, y), 2.0f);
+                    card.Position.MoveTo(new Vector2(x, y), 1.0f);
+                });
+            }
+
+            if (InputManager.IsKeyDown(Keys.D2))
+            {
+                Random rng = new Random();
+                this.cards.ForEach(card =>
+                {
+                    int x = rng.Next(0, OptionsManager.screenWidth);
+                    int y = rng.Next(0, OptionsManager.screenHeight);
+
+                    card.Position.MoveTo(new Vector2(x, y), 3.0f, InterpolationType.EaseIn);
+                });
+            }
+
+            if (InputManager.IsKeyDown(Keys.D3))
+            {
+                Random rng = new Random();
+                this.cards.ForEach(card =>
+                {
+                    int x = rng.Next(0, OptionsManager.screenWidth);
+                    int y = rng.Next(0, OptionsManager.screenHeight);
+
+                    card.Position.MoveTo(new Vector2(x, y), 3.0f, InterpolationType.EaseOut);
+                });
+            }
+
+            if (InputManager.IsKeyDown(Keys.D4))
+            {
+                Random rng = new Random();
+                this.cards.ForEach(card =>
+                {
+                    int x = rng.Next(0, OptionsManager.screenWidth);
+                    int y = rng.Next(0, OptionsManager.screenHeight);
+
+                    card.Position.MoveTo(new Vector2(x, y), 1.5f, InterpolationType.EaseInAndOut);
                 });
             }
         }

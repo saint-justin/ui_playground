@@ -9,10 +9,10 @@
 
     internal enum InterpolationType
     {
-        linear,
-        easeIn,
-        easeOut,
-        easeInAndOut,
+        Linear,
+        EaseIn,
+        EaseOut,
+        EaseInAndOut,
     }
 
     internal class PositionTracker
@@ -34,11 +34,15 @@
             this.PositionCurrent = position;
         }
 
-        // Move from current position to new position over a defined duration (in seconds)
+        /// <summary>
+        /// Move from current position to new position over a defined duration in seconds.
+        /// </summary>
+        /// <param name="position">Target position that to end movement at.</param>
+        /// <param name="duration">Total duration of movement in seconds.</param>
         public void MoveTo(Vector2 position, float duration)
         {
             this.Moving = true;
-            this.Interpolation = InterpolationType.linear;
+            this.Interpolation = InterpolationType.Linear;
 
             this.positionStart = this.PositionCurrent;
             this.positionEnd = position;
@@ -47,18 +51,30 @@
             this.durationTarget = duration;
         }
 
-        /* 
-        // Variant to allows alternative interpolation types
+        /// <summary>
+        /// Move from current position to new position over a defined duration in seconds by specific interpolation method.
+        /// </summary>
+        /// <param name="position">Target position that to end movement at.</param>
+        /// <param name="duration">Total duration of movement in seconds.</param>
+        /// <param name="interpolationType">Method of interpolation to use.</param>
         public void MoveTo(Vector2 position, float duration, InterpolationType interpolationType)
         {
-            this.currentTime = 0.0f;
-            this.endPos = position;
-            this.duration = duration;
-            this.interpolationType = interpolationType;
-        } 
-        */
+            this.Interpolation = interpolationType;
+            this.Moving = true;
 
-        // Only way the current position should be gotten
+            this.positionStart = this.PositionCurrent;
+            this.positionEnd = position;
+
+            this.durationCurrent = 0.0f;
+            this.durationTarget = duration;
+        }
+
+        /// <summary>
+        /// Get the current position of the object.
+        /// </summary>
+        /// <param name="gameTime">GameTime object from main</param>
+        /// <returns>The current position of the object this is attached to.</returns>
+        /// <exception cref="Exception">Thrown if interpolation method requested is not yet implemented.</exception>
         public Vector2 GetCurrent(GameTime gameTime)
         {
             // Non-moving
@@ -73,10 +89,23 @@
             }
 
             // Calculate new position
+            float basePercentage = (float)(this.durationCurrent / this.durationTarget);
             switch (this.Interpolation)
             {
-                case InterpolationType.linear:
-                    this.PositionCurrent = Vector2.Lerp(this.positionStart, this.positionEnd, (float)(this.durationCurrent / this.durationTarget));
+                case InterpolationType.Linear:
+                    this.PositionCurrent = Vector2.Lerp(this.positionStart, this.positionEnd, basePercentage);
+                    break;
+
+                case InterpolationType.EaseIn:
+                    this.PositionCurrent = Vector2.Lerp(this.positionStart, this.positionEnd, (float)(1.0 - Math.Cos((basePercentage * Math.PI) / 2)));
+                    break;
+
+                case InterpolationType.EaseOut:
+                    this.PositionCurrent = Vector2.Lerp(this.positionStart, this.positionEnd, (float)Math.Sin((basePercentage * Math.PI) / 2));
+                    break;
+
+                case InterpolationType.EaseInAndOut:
+                    this.PositionCurrent = Vector2.Lerp(this.positionStart, this.positionEnd, (float)((Math.Cos(basePercentage * Math.PI) - 1) / -2f));
                     break;
 
                 default:

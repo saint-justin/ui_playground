@@ -34,12 +34,6 @@
             this.Dirty = true;
         }
 
-        public void MoveTo(Vector2 targetPosition, float duration)
-        {
-            this.Position.MoveTo(targetPosition, duration);
-            this.Dirty = true;
-        }
-
         public void Initialize() { /* do nothing */ }
 
         // Update the card's current draw position to be centered about its current position
@@ -49,8 +43,8 @@
 
             Vector2 current = this.Position.GetCurrent(gameTime);
             this.currentTranspose = new Rectangle(
-                (int)Math.Round(current.X) - (int) Math.Round(this.ScaledTextureDimensions.X / 2),
-                (int)Math.Round(current.Y) - (int) Math.Round(this.ScaledTextureDimensions.Y / 2),
+                (int)Math.Round(current.X) - (int)Math.Round(this.ScaledTextureDimensions.X / 2),
+                (int)Math.Round(current.Y) - (int)Math.Round(this.ScaledTextureDimensions.Y / 2),
                 (int)Math.Round(this.ScaledTextureDimensions.X),
                 (int)Math.Round(this.ScaledTextureDimensions.Y));
 
