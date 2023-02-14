@@ -1,50 +1,43 @@
 ﻿namespace MonoGame_SandboxTest.CardRenderSystem
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Runtime.CompilerServices;
-    using System.Text;
-    using System.Threading.Tasks;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
 
     internal class Card : IEntity
     {
         private Texture2D texture;
-
-        public Vector2 scaledTextureDimensions { get; private set; }
-        public PositionTracker position { get; private set; }
-        public Vector2 scale { get; set; }
-
-        // Denotes whether or not the transpose needs to be re-calculated
-        public bool isDirty { get; private set; }
-        
-        public bool isMoving { get; set; }
-
         private Rectangle baseTranspose;
         private Rectangle currentTranspose;
+
+        public Vector2 ScaledTextureDimensions { get; private set; }
+
+        public PositionTracker Position { get; private set; }
+
+        public Vector2 Scale { get; set; }
+
+        public bool Dirty { get; private set; }
 
         public Card(Texture2D texture, Vector2 position, Vector2 scale)
         {
             this.texture = texture;
-            this.position = new PositionTracker(position);
-            this.scale = scale;
-            
+            this.Position = new PositionTracker(position);
+            this.Scale = scale;
+
             this.baseTranspose = new Rectangle(0, 0, texture.Width, texture.Height);
-            this.scaledTextureDimensions = new Vector2(texture.Width * scale.X, texture.Height * scale.Y);
+            this.ScaledTextureDimensions = new Vector2(texture.Width * scale.X, texture.Height * scale.Y);
         }
 
         public void SetPosition(Vector2 position)
         {
-            this.position = new PositionTracker(position);
-            this.isDirty = true;
+            this.Position = new PositionTracker(position);
+            this.Dirty = true;
         }
 
         public void MoveTo(Vector2 targetPosition, float duration)
         {
-            this.position.MoveTo(targetPosition, duration);
-            this.isDirty = true;
+            this.Position.MoveTo(targetPosition, duration);
+            this.Dirty = true;
         }
 
         public void Initialize() { /* do nothing */ }
@@ -52,16 +45,16 @@
         // Update the card's current draw position to be centered about its current position
         public void Update(GameTime gameTime)
         {
-            if (!this.isDirty) { return; }
+            if (!this.Dirty && !this.Position.Moving) { return; }
 
-            Vector2 current = this.position.GetCurrent(gameTime);
+            Vector2 current = this.Position.GetCurrent(gameTime);
             this.currentTranspose = new Rectangle(
-                (int) Math.Round(current.X) - (int) Math.Round(this.scaledTextureDimensions.X / 2),
-                (int) Math.Round(current.Y) - (int) Math.Round(this.scaledTextureDimensions.Y / 2), 
-                (int) Math.Round(this.scaledTextureDimensions.X),
-                (int) Math.Round(this.scaledTextureDimensions.Y));
+                (int)Math.Round(current.X) - (int) Math.Round(this.ScaledTextureDimensions.X / 2),
+                (int)Math.Round(current.Y) - (int) Math.Round(this.ScaledTextureDimensions.Y / 2),
+                (int)Math.Round(this.ScaledTextureDimensions.X),
+                (int)Math.Round(this.ScaledTextureDimensions.Y));
 
-            this.isDirty = false;
+            this.Dirty = false;
         }
 
         // Draws card centered about its position
@@ -69,8 +62,8 @@
         {
             spriteBatch.Draw(
                 this.texture,
-                this.currentTranspose, 
-                this.baseTranspose, 
+                this.currentTranspose,
+                this.baseTranspose,
                 Color.White);
         }
     }

@@ -69,7 +69,7 @@
                     int x = rng.Next(0, OptionsManager.screenWidth);
                     int y = rng.Next(0, OptionsManager.screenHeight);
 
-                    card.MoveTo(new Vector2(x, y), 3.0f);
+                    card.MoveTo(new Vector2(x, y), 2.0f);
                 });
             }
         }

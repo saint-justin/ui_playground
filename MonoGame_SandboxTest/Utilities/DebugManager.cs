@@ -40,42 +40,6 @@
             debugPixel = contentManager.Load<Texture2D>("debug_pixel");
         }
 
-        /// <summary>
-        /// Add message to be drawn to the screen this frame.
-        /// </summary>
-        /// <param name="message">Text that will be written to the screen.</param>
-        public static void WriteLine(string message)
-        {
-            // TODO: Fix double-writing bug when FPS de-syncs from update calls
-            messageQueue.Add(message);
-        }
-
-        /// <summary>
-        /// Helper function to draw a line segment between two positions.
-        /// </summary>
-        /// <param name="start">Starting position where the line is drawn from.</param>
-        /// <param name="end">Ending position where the line is drawn to.</param>
-        /// <param name="thickness">Stroke thickness/width of the line.</param>
-        /// <param name="color">Color of the line.</param>
-        public static void DrawLine(Vector2 start, Vector2 end, float thickness, Color color)
-        {
-            float magnitude = Vector2.Distance(start, end);
-            float angle = (float)Math.Atan2(end.Y - start.Y, end.X - start.X);
-
-            lineQueue.Add(new Line(start, magnitude, angle, thickness, color));
-        }
-
-        /// <summary>
-        /// Helper function to draw the outline of a shape represented as a series of lines.
-        /// </summary>
-        /// <param name="lines">List of tuples representing start/end positions of the line segments that make the shape.</param>
-        /// <param name="thickness">Stroke thickness/width of the line.</param>
-        /// <param name="color">Color of the shape.</param>
-        public static void DrawShape(List<(Vector2, Vector2)> lines, float thickness, Color color)
-        {
-            lines.ForEach(line => DrawLine(line.Item1, line.Item2, thickness, color));
-        }
-
         public static void Draw(SpriteBatch spriteBatch)
         {
             if (!Enabled)
@@ -113,6 +77,42 @@
             messageQueue.Clear();
             lineQueue.Clear();
             spriteBatch.End();
+        }
+
+        /// <summary>
+        /// Add message to be drawn to the screen this frame.
+        /// </summary>
+        /// <param name="message">Text that will be written to the screen.</param>
+        public static void WriteLine(string message)
+        {
+            // TODO: Fix double-writing bug when FPS de-syncs from update calls
+            messageQueue.Add(message);
+        }
+
+        /// <summary>
+        /// Helper function to draw a line segment between two positions.
+        /// </summary>
+        /// <param name="start">Starting position where the line is drawn from.</param>
+        /// <param name="end">Ending position where the line is drawn to.</param>
+        /// <param name="thickness">Stroke thickness/width of the line.</param>
+        /// <param name="color">Color of the line.</param>
+        public static void DrawLine(Vector2 start, Vector2 end, float thickness, Color color)
+        {
+            float magnitude = Vector2.Distance(start, end);
+            float angle = (float)Math.Atan2(end.Y - start.Y, end.X - start.X);
+
+            lineQueue.Add(new Line(start, magnitude, angle, thickness, color));
+        }
+
+        /// <summary>
+        /// Helper function to draw the outline of a shape represented as a series of lines.
+        /// </summary>
+        /// <param name="lines">List of tuples representing start/end positions of the line segments that make the shape.</param>
+        /// <param name="thickness">Stroke thickness/width of the line.</param>
+        /// <param name="color">Color of the shape.</param>
+        public static void DrawShape(List<(Vector2, Vector2)> lines, float thickness, Color color)
+        {
+            lines.ForEach(line => DrawLine(line.Item1, line.Item2, thickness, color));
         }
     }
 

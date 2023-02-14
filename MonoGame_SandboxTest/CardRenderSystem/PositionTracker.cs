@@ -7,7 +7,7 @@
     using System.Threading.Tasks;
     using Microsoft.Xna.Framework;
 
-    enum InterpolationType
+    internal enum InterpolationType
     {
         linear,
         easeIn,
@@ -17,29 +17,34 @@
 
     internal class PositionTracker
     {
-        public bool isMoving { get; private set; }
-        public InterpolationType interpolationType { get; set; }
-        public Vector2 positionCurrent { private get; set; }
-
-        // For movement
+        // Internal movement trackers
         private Vector2 positionStart;
         private Vector2 positionEnd;
         private double durationCurrent;
         private double durationTarget;
 
+        public bool Moving { get; private set; }
+
+        public InterpolationType Interpolation { get; set; }
+
+        public Vector2 PositionCurrent { private get; set; }
+
         public PositionTracker(Vector2 position)
         {
-            this.positionCurrent = position;
+            this.PositionCurrent = position;
         }
 
         // Move from current position to new position over a defined duration (in seconds)
         public void MoveTo(Vector2 position, float duration)
         {
-            this.positionStart = this.positionCurrent;
+            this.Moving = true;
+            this.Interpolation = InterpolationType.linear;
+
+            this.positionStart = this.PositionCurrent;
             this.positionEnd = position;
+
             this.durationCurrent = 0.0f;
             this.durationTarget = duration;
-            this.interpolationType = InterpolationType.linear;
         }
 
         /* 
@@ -57,28 +62,28 @@
         public Vector2 GetCurrent(GameTime gameTime)
         {
             // Non-moving
-            if (!this.isMoving) { return this.positionCurrent; }
+            if (!this.Moving) { return this.PositionCurrent; }
 
             // Check if this is the last tick of movement
             this.durationCurrent += gameTime.ElapsedGameTime.TotalSeconds;
             if (this.durationCurrent >= this.durationTarget)
             {
                 this.durationCurrent = this.durationTarget;
-                this.isMoving = false;
+                this.Moving = false;
             }
 
             // Calculate new position
-            switch (this.interpolationType)
-            {   
+            switch (this.Interpolation)
+            {
                 case InterpolationType.linear:
-                    this.positionCurrent = Vector2.Lerp(this.positionStart, this.positionEnd, (float) this.durationCurrent);
+                    this.PositionCurrent = Vector2.Lerp(this.positionStart, this.positionEnd, (float)(this.durationCurrent / this.durationTarget));
                     break;
 
                 default:
                     throw new Exception("Interpolation method not implemented");
             }
 
-            return this.positionCurrent;
+            return this.PositionCurrent;
         }
     }
 }
